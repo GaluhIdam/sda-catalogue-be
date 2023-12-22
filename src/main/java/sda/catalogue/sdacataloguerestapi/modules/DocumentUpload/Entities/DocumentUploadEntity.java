@@ -1,6 +1,6 @@
-package sda.catalogue.sdacataloguerestapi.modules.MappingFunction.Entities;
+package sda.catalogue.sdacataloguerestapi.modules.DocumentUpload.Entities;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,9 +10,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
+import sda.catalogue.sdacataloguerestapi.modules.WebApp.Entities.WebAppEntity;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -21,19 +21,19 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
-@Table(name = "tb_mapping_function")
-public class MappingFunctionEntity {
+@Table(name = "tb_document_upload")
+public class DocumentUploadEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_mapping_function")
-    private long idMappingFunction;
+    @Column(name = "id_document_upload")
+    private long idDocumentUpload;
 
     @UuidGenerator
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
 
-    @Column(name = "mapping_function")
-    private String mappingFunction;
+    @Column(name = "path")
+    private String path;
 
     @CreationTimestamp
     @Column(name = "created_at")
@@ -43,6 +43,8 @@ public class MappingFunctionEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "mappingFunctionEntity", cascade = CascadeType.ALL)
-    private List<DinasEntity> dinasEntityList;
+    @ManyToOne
+    @JoinColumn(name = "id_webapp")
+    @JsonIgnore
+    private WebAppEntity webAppEntity;
 }

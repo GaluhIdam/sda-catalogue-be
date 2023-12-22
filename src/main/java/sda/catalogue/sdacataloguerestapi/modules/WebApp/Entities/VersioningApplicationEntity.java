@@ -1,6 +1,6 @@
-package sda.catalogue.sdacataloguerestapi.modules.MappingFunction.Entities;
+package sda.catalogue.sdacataloguerestapi.modules.WebApp.Entities;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -21,19 +21,25 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
-@Table(name = "tb_mapping_function")
-public class MappingFunctionEntity {
+@Table(name = "tb_versioning_application")
+public class VersioningApplicationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_mapping_function")
-    private long idMappingFunction;
+    @Column(name = "id_versioning_application")
+    private long idVersioningApplication;
 
     @UuidGenerator
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
 
-    @Column(name = "mapping_function")
-    private String mappingFunction;
+    @Column(name = "version")
+    private String version;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "release_date")
+    private Date releaseDate;
 
     @CreationTimestamp
     @Column(name = "created_at")
@@ -43,6 +49,8 @@ public class MappingFunctionEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "mappingFunctionEntity", cascade = CascadeType.ALL)
-    private List<DinasEntity> dinasEntityList;
+    @ManyToOne
+    @JoinColumn(name = "id_webapp")
+    @JsonIgnore
+    private WebAppEntity webAppEntity;
 }
